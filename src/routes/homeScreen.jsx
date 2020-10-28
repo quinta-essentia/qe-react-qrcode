@@ -42,7 +42,7 @@ const HomeScreen = ({
       >
         HOME TEST BUTTON
       </Button>
-      <QRCode value='http://facebook.github.io/react/' size='256' bgColor='#FF0000' fgColor='#0000FF' level='H' imageSettings={imageOptions}/>
+      <QRCode value='http://facebook.github.io/react/' size='256' level='H' imageSettings={imageOptions}/>
 
     </ApplicationContainer>
   );

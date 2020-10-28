@@ -9,7 +9,6 @@ import QRCodeImpl from 'qr.js/lib/QRCode';
 import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel';
 
 function convertStr (str) {
-  console.log(str);
   let out = '';
   for (let i = 0; i < str.length; i++) {
     let charcode = str.charCodeAt(i);
@@ -147,7 +146,6 @@ function getImageSettings (
     const ceilH = Math.ceil(h + y - floorY);
     excavation = { x: floorX, y: floorY, w: ceilW, h: ceilH };
   }
-
   return { x, y, h, w, excavation };
 }
 
@@ -303,11 +301,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 class QRCodeSVG extends React.PureComponent {
-  constructor (props) {
-    super(props);
-    this.defaultProps = DEFAULT_PROPS;
-  }
-
   render () {
     const {
       value,
@@ -367,6 +360,8 @@ class QRCodeSVG extends React.PureComponent {
     );
   }
 }
+
+QRCodeSVG.defaultProps = DEFAULT_PROPS;
 
 if (process.env.NODE_ENV !== 'production') {
   QRCodeSVG.propTypes = PROP_TYPES;

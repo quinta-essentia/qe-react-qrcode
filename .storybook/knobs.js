@@ -1,6 +1,7 @@
 import noop from 'lodash/noop';
 import {
   boolean,
+  color,
   date,
   number,
   object,
@@ -24,6 +25,11 @@ const booleanKnob = ({
   label,
   defaultValue,
 } = {}) => boolean(label, defaultValue);
+
+const colorKnob = ({
+  label, 
+  defaultValue
+} = {}) => color(label, defaultValue);
 
 const colorNameSelectKnob = ({
   label = 'colorName',
@@ -187,6 +193,7 @@ const textKnob = ({
 
 export {
   booleanKnob,
+  colorKnob,
   colorNameSelectKnob,
   dateKnob,
   fieldKeyTextKnob,
