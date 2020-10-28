@@ -27,7 +27,7 @@ const booleanKnob = ({
 } = {}) => boolean(label, defaultValue);
 
 const colorKnob = ({
-  label, 
+  label,
   defaultValue
 } = {}) => color(label, defaultValue);
 
