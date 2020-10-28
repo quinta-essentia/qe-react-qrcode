@@ -14,7 +14,6 @@ import AboutScreen from './aboutScreen';
 import HomeScreen from './homeScreen';
 
 export const AppRoutes = {
- 
   ABOUT: {
     path: '/about',
     label: 'ABOUT',

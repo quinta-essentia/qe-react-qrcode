@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,7 +19,6 @@ const AboutScreen = ({
     appCreateNotificationAction,
   },
 }) => {
-
   const handeClickEdit = () => {
     appCreateNotificationAction(
       'TEST From About Screen',
@@ -36,7 +35,7 @@ const AboutScreen = ({
       >
         ABOUT TEST BUTTON
       </Button>
-      
+
     </ApplicationContainer>
   );
 };

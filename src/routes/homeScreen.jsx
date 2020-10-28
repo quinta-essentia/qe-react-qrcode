@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import QRCode from '../components/blocks/qrCode/qrCode';
 
 import {
   Button,
@@ -19,12 +20,17 @@ const HomeScreen = ({
     appCreateNotificationAction,
   },
 }) => {
-
   const handeClickEdit = () => {
     appCreateNotificationAction(
       'TEST From Home Screen',
       NotificationTypeValues.SUCCESS,
     );
+  };
+
+  const imageOptions = {
+    src: '../../assets/quinta.png',
+    height: 80,
+    width: 80,
   };
 
   return (
@@ -36,10 +42,26 @@ const HomeScreen = ({
       >
         HOME TEST BUTTON
       </Button>
-      
+      <QRCode value='http://facebook.github.io/react/' size='256' bgColor='#FF0000' fgColor='#0000FF' level='H' imageSettings={imageOptions}/>
+
     </ApplicationContainer>
   );
 };
+
+//       value: PropTypes.string.isRequired,
+//       size: PropTypes.number,
+//       level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
+//       bgColor: PropTypes.string,
+//       fgColor: PropTypes.string,
+//       includeMargin: PropTypes.bool,
+//       imageSettings: PropTypes.shape({
+//         src: PropTypes.string.isRequired,
+//         height: PropTypes.number.isRequired,
+//         width: PropTypes.number.isRequired,
+//         excavate: PropTypes.bool,
+//         x: PropTypes.number,
+//         y: PropTypes.number,
+//       }),
 
 HomeScreen.propTypes = {
   actions: PropTypes.exact({
