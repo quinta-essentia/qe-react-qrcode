@@ -36,5 +36,5 @@ module.exports = {
       version: 'detect',
     }
   },
-  ignorePatterns: ['build/**/*.js'],
+  ignorePatterns: ['build/**/*.js', 'disc/'],
 };

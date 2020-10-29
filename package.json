@@ -4,14 +4,23 @@
   "description": "",
   "private": true,
   "main": "index.js",
+  "license": "MIT",
   "scripts": {
     "deploy": "sh build.sh && cd dist && npm publish",
     "lint": "./node_modules/.bin/eslint \"./.storybook/*.js\" \"./**/*.js\" \"./**/*.jsx\"",
     "pre-commit": "npm run lint",
     "storybook": "./node_modules/.bin/start-storybook --port 3333"
   },
-  "author": "Basic",
-  "license": "ISC",
+  "author": "Petar Basic <petarbasic1910@gmail.com>",
+  "homepage": "https://github.com/quinta-essentia/qe-react-qrcode",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/quinta-essentia/qe-react-qrcode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/quinta-essentia/qe-react-qrcode/issues",
+    "email": "petarbasic1910@gmail.com"
+  },
   "dependencies": {
     "@storybook/addon-a11y": "5.3.18",
     "@storybook/addon-actions": "5.3.18",
