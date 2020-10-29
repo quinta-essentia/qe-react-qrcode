@@ -16,11 +16,11 @@ module.exports = {
     '@babel/plugin-proposal-class-properties',
     ['babel-plugin-module-resolver', {
       alias: {
-        '@mocks': './__mocks__',
-        '@routes': './src/routes',
-        '@storybook/utilities': './.storybook',
-        '@theme': './src/components/theme',
-        '@utilities': './src/utilities',
+        // '@mocks': './__mocks__',
+        // '@routes': './src/routes',
+        // '@storybook/utilities': './.storybook',
+        // '@theme': './src/components/theme',
+        // '@utilities': './src/utilities',
       },
     }],
   ],

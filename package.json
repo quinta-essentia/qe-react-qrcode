@@ -1,22 +1,18 @@
 {
-  "name": "client",
+  "name": "qe-react-qrcode",
   "version": "1.0.0",
   "description": "",
   "private": true,
   "main": "index.js",
   "scripts": {
-    "build": "npm run clean && webpack",
-    "clean": "rm -rf build",
+    "deploy": "sh build.sh && cd dist && npm publish",
     "lint": "./node_modules/.bin/eslint \"./.storybook/*.js\" \"./**/*.js\" \"./**/*.jsx\"",
     "pre-commit": "npm run lint",
-    "start": "webpack-dev-server --port 3030",
-    "storybook": "./node_modules/.bin/start-storybook --port 3333",
-    "test": "./node_modules/.bin/jest"
+    "storybook": "./node_modules/.bin/start-storybook --port 3333"
   },
-  "author": "",
+  "author": "Basic",
   "license": "ISC",
   "dependencies": {
-    "@apollo/client": "^3.1.4",
     "@storybook/addon-a11y": "5.3.18",
     "@storybook/addon-actions": "5.3.18",
     "@storybook/addon-knobs": "5.3.18",
@@ -24,21 +20,12 @@
     "@storybook/addon-storyshots-puppeteer": "5.3.18",
     "@storybook/addon-storysource": "5.3.18",
     "@storybook/react": "5.3.18",
-    "axios": "0.20.0",
     "classnames": "2.2.6",
-    "connected-react-router": "6.8.0",
-    "date-fns": "2.16.1",
-    "graphql": "^15.4.0",
     "history": "5.0.0",
     "lodash": "4.17.15",
     "numeral": "2.0.6",
     "prop-types": "15.7.2",
-    "qr.js": "0.0.0",
-    "react-redux": "7.2.1",
-    "react-table": "^7.5.0",
-    "redux": "4.0.5",
-    "redux-thunk": "2.3.0",
-    "uuid": "8.3.0"
+    "qr.js": "0.0.0"
   },
   "peerDependencies": {
     "qe-react-components-style": "0.0.20",
@@ -80,7 +67,6 @@
     "file-loader": "6.1.0",
     "html-webpack-plugin": "4.4.1",
     "husky": "4.2.5",
-    "jest": "26.4.2",
     "qe-react-components-style": "0.0.20",
     "qe-react-components-web": "0.0.32",
     "qe-react-forms-renderer": "0.0.23",

@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import QRCode from './qrCode';
+import QRCode from './qrCode.jsx';
 import {
   longTextKnob,
   numberKnob,

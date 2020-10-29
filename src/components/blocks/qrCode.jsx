@@ -67,6 +67,7 @@ const DEFAULT_IMG_SCALE = 0.1;
 
 function generatePath (modules, margin = 0) {
   const ops = [];
+  console.log(modules);
   forEach(modules, function (row, y) {
     let start = null;
     forEach(row, function (cell, x) {
