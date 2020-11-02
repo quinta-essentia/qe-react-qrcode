@@ -39,6 +39,7 @@ const DEFAULT_PROPS = {
   bgColor: '#FFFFFF',
   fgColor: '#000000',
   includeMargin: false,
+  shape: 'quadrant'
 };
 
 const PROP_TYPES =
@@ -50,6 +51,7 @@ const PROP_TYPES =
       bgColor: PropTypes.string,
       fgColor: PropTypes.string,
       includeMargin: PropTypes.bool,
+      shape: PropTypes.oneOf(['circle', 'quadrant']),
       imageSettings: PropTypes.shape({
         src: PropTypes.string.isRequired,
         height: PropTypes.number.isRequired,
@@ -99,6 +101,22 @@ function generatePath (modules, margin = 0) {
     });
   });
   return ops.join('');
+}
+
+function generateCirclePath (modules, margin = 0, scale) {
+  const ops = [];
+  forEach(modules, (row, y) => {
+    forEach(row, (cell, x) => {
+      if (cell) {
+        ops.push(circlePath(x + margin, y + margin, scale * 3));
+      }
+    });
+  });
+  return ops.join('');
+}
+
+function circlePath (cx, cy, r) {
+  return `M ${cx} ${cy} m -${r}, 0 a ${r},${r} 0 1,0 ${r * 2},0 a ${r},${r} 0 1,0 -${r * 2},0`;
 }
 
 function excavateModules (modules, excavation) {
@@ -183,6 +201,7 @@ class QRCodeCanvas extends React.PureComponent {
       fgColor,
       includeMargin,
       imageSettings,
+      shape,
     } = this.props;
 
     const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -224,7 +243,7 @@ class QRCodeCanvas extends React.PureComponent {
       ctx.fillStyle = fgColor;
       if (SUPPORTS_PATH2D) {
         // eslint-disable-next-line lodash/prefer-lodash-method
-        ctx.fill(new Path2D(generatePath(cells, margin)));
+        ctx.fill(new Path2D(shape === 'circle' ? generateCirclePath(cells, margin, numCells / size * 2) : generatePath(cells, margin)));
       } else {
         forEach(cells, function (row, rdx) {
           forEach(row, function (cell, cdx) {
@@ -315,6 +334,7 @@ class QRCodeSVG extends React.PureComponent {
       fgColor,
       includeMargin,
       imageSettings,
+      shape,
       ...otherProps
     } = this.props;
 
@@ -330,6 +350,7 @@ class QRCodeSVG extends React.PureComponent {
     const margin = includeMargin ? MARGIN_SIZE : 0;
     const numCells = cells.length + margin * 2;
     const calculatedImageSettings = getImageSettings(this.props, cells);
+    const scale = numCells / size * 2;
 
     let image = null;
     if (imageSettings != null && calculatedImageSettings != null) {
@@ -349,7 +370,7 @@ class QRCodeSVG extends React.PureComponent {
       );
     }
 
-    const fgPath = generatePath(cells, margin);
+    const fgPath = shape === 'circle' ? generateCirclePath(cells, margin, scale) : generatePath(cells, margin);
 
     return (
       <svg
