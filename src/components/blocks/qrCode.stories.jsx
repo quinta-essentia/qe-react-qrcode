@@ -18,8 +18,8 @@ storiesOf('RTFKT/Components/Blocks/qrCode', module)
       value={longTextKnob({ label: 'Value or URL', defaultValue: 'http://facebook.github.io/react/' })}
       size={numberKnob({ label: 'Size', defaultValue: 256 })}
       level={selectKnob({ label: 'Level', options: { L: 'L', M: 'M', Q: 'Q', H: 'H' }, defaultValue: 'L' })}
-      bgColor={colorKnob({ label: 'Background Color', defaultValue: '#FF0000' })}
-      fgColor={colorKnob({ label: 'Foreground Color', defaultValue: '#0000FF' })}
+      bgColor={colorKnob({ label: 'Background Color', defaultValue: 'rgb(255,255,255)' })}
+      fgColor={colorKnob({ label: 'Foreground Color', defaultValue: 'rgb(0,0,0)' })}
       includeMargin={booleanKnob({ label: 'Include Margin', defaultValue: false })}
       renderAs={selectKnob({ label: 'Render as', options: { svg: 'svg', canvas: 'canvas' }, defaultValue: 'svg' })}
       imageSettings={{
