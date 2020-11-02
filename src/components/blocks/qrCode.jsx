@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import forEach from 'lodash/forEach';
 import map from 'lodash/map';
-import fill from 'lodash/fill';
 
 import QRCodeImpl from 'qr.js/lib/QRCode';
 import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel';
@@ -163,7 +162,8 @@ class QRCodeCanvas extends React.PureComponent {
   constructor (props) {
     super(props);
     this.state = { imgLoaded: false };
-    this.defaultProps = DEFAULT_PROPS;
+    this.handleImageLoad = this.handleImageLoad.bind(this);
+    this.update = this.update.bind(this);
   }
 
   componentDidMount () {
@@ -198,6 +198,7 @@ class QRCodeCanvas extends React.PureComponent {
       }
 
       let cells = qrcode.modules;
+      console.log(cells);
       if (cells === null) {
         return;
       }
@@ -222,7 +223,8 @@ class QRCodeCanvas extends React.PureComponent {
 
       ctx.fillStyle = fgColor;
       if (SUPPORTS_PATH2D) {
-        fill(ctx, new Path2D(generatePath(cells, margin)));
+        // eslint-disable-next-line lodash/prefer-lodash-method
+        ctx.fill(new Path2D(generatePath(cells, margin)));
       } else {
         forEach(cells, function (row, rdx) {
           forEach(row, function (cell, cdx) {
@@ -296,6 +298,8 @@ class QRCodeCanvas extends React.PureComponent {
     );
   }
 }
+
+QRCodeCanvas.defaultProps = DEFAULT_PROPS;
 
 if (process.env.NODE_ENV !== 'production') {
   QRCodeCanvas.propTypes = PROP_TYPES;

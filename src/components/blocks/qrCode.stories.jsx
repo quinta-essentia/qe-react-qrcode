@@ -21,6 +21,7 @@ storiesOf('RTFKT/Components/Blocks/qrCode', module)
       bgColor={colorKnob({ label: 'Background Color', defaultValue: '#FF0000' })}
       fgColor={colorKnob({ label: 'Foreground Color', defaultValue: '#0000FF' })}
       includeMargin={booleanKnob({ label: 'Include Margin', defaultValue: false })}
+      renderAs={selectKnob({ label: 'Render as', options: { svg: 'svg', canvas: 'canvas' }, defaultValue: 'svg' })}
       imageSettings={{
         src: longTextKnob({ label: 'Image source', defaultValue: 'https://emoji.slack-edge.com/T8C69ARQV/quintaessentia/6e9e7ed89c376844.png' }),
         height: numberKnob({ label: 'Image height', defaultValue: 80 }),
