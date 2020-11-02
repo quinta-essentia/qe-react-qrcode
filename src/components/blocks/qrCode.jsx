@@ -7,6 +7,15 @@ import map from 'lodash/map';
 import QRCodeImpl from 'qr.js/lib/QRCode';
 import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel';
 
+import {
+  circlePath,
+  DEFAULT_PROPS,
+  PROP_TYPES,
+  MARGIN_SIZE,
+  DEFAULT_IMG_SCALE,
+  SUPPORTS_PATH2D,
+} from './utils';
+
 function convertStr (str) {
   let out = '';
   for (let i = 0; i < str.length; i++) {
@@ -32,41 +41,6 @@ function convertStr (str) {
   }
   return out;
 }
-
-const DEFAULT_PROPS = {
-  size: 128,
-  level: 'L',
-  bgColor: '#FFFFFF',
-  fgColor: '#000000',
-  includeMargin: false,
-  shape: 'quadrant',
-  thickness: 1,
-};
-
-const PROP_TYPES =
-  process.env.NODE_ENV !== 'production'
-    ? {
-      value: PropTypes.string.isRequired,
-      size: PropTypes.number,
-      level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-      bgColor: PropTypes.string,
-      fgColor: PropTypes.string,
-      includeMargin: PropTypes.bool,
-      shape: PropTypes.oneOf(['circle', 'quadrant']),
-      thickness: PropTypes.number,
-      imageSettings: PropTypes.shape({
-        src: PropTypes.string.isRequired,
-        height: PropTypes.number.isRequired,
-        width: PropTypes.number.isRequired,
-        excavate: PropTypes.bool,
-        x: PropTypes.number,
-        y: PropTypes.number,
-      }),
-    }
-    : {};
-
-const MARGIN_SIZE = 4;
-const DEFAULT_IMG_SCALE = 0.1;
 
 function generatePath (modules, margin = 0) {
   const ops = [];
@@ -117,10 +91,6 @@ function generateCirclePath (modules, margin = 0, radius) {
   return ops.join('');
 }
 
-function circlePath (cx, cy, r) {
-  return `M ${cx} ${cy} m -${r}, 0 a ${r},${r} 0 1,0 ${r * 2},0 a ${r},${r} 0 1,0 -${r * 2},0`;
-}
-
 function excavateModules (modules, excavation) {
   return map(modules.slice(), (row, y) => {
     if (y < excavation.y || y >= excavation.y + excavation.h) {
@@ -168,15 +138,6 @@ function getImageSettings (
   }
   return { x, y, h, w, excavation };
 }
-
-const SUPPORTS_PATH2D = (function () {
-  try {
-    new Path2D().addPath(new Path2D());
-  } catch (e) {
-    return false;
-  }
-  return true;
-})();
 
 class QRCodeCanvas extends React.PureComponent {
   constructor (props) {
