@@ -29,12 +29,14 @@
     "@storybook/addon-storyshots-puppeteer": "5.3.18",
     "@storybook/addon-storysource": "5.3.18",
     "@storybook/react": "5.3.18",
+    "axios": "^0.21.0",
     "classnames": "2.2.6",
     "history": "5.0.0",
     "lodash": "4.17.15",
     "numeral": "2.0.6",
     "prop-types": "15.7.2",
-    "qr.js": "0.0.0"
+    "qr.js": "0.0.0",
+    "react-table": "^7.6.1"
   },
   "peerDependencies": {
     "qe-react-components-style": "0.0.20",
@@ -48,7 +50,7 @@
   "devDependencies": {
     "@babel/cli": "7.10.4",
     "@babel/core": "7.10.4",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-object-rest-spread": "7.10.4",
     "@babel/plugin-transform-object-assign": "7.10.4",
     "@babel/plugin-transform-react-jsx": "7.10.4",

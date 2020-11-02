@@ -18,8 +18,8 @@ module.exports = {
       alias: {
         // '@mocks': './__mocks__',
         // '@routes': './src/routes',
-        // '@storybook/utilities': './.storybook',
-        // '@theme': './src/components/theme',
+        '@storybook/utilities': './.storybook',
+        '@theme': './src/components/theme',
         // '@utilities': './src/utilities',
       },
     }],
