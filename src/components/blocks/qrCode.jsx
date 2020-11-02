@@ -39,7 +39,8 @@ const DEFAULT_PROPS = {
   bgColor: '#FFFFFF',
   fgColor: '#000000',
   includeMargin: false,
-  shape: 'quadrant'
+  shape: 'quadrant',
+  thickness: 1,
 };
 
 const PROP_TYPES =
@@ -52,6 +53,7 @@ const PROP_TYPES =
       fgColor: PropTypes.string,
       includeMargin: PropTypes.bool,
       shape: PropTypes.oneOf(['circle', 'quadrant']),
+      thickness: PropTypes.number,
       imageSettings: PropTypes.shape({
         src: PropTypes.string.isRequired,
         height: PropTypes.number.isRequired,
@@ -103,12 +105,12 @@ function generatePath (modules, margin = 0) {
   return ops.join('');
 }
 
-function generateCirclePath (modules, margin = 0, scale) {
+function generateCirclePath (modules, margin = 0, radius) {
   const ops = [];
   forEach(modules, (row, y) => {
     forEach(row, (cell, x) => {
       if (cell) {
-        ops.push(circlePath(x + margin, y + margin, scale * 3));
+        ops.push(circlePath(x + margin, y + margin, radius));
       }
     });
   });
@@ -243,7 +245,7 @@ class QRCodeCanvas extends React.PureComponent {
       ctx.fillStyle = fgColor;
       if (SUPPORTS_PATH2D) {
         // eslint-disable-next-line lodash/prefer-lodash-method
-        ctx.fill(new Path2D(shape === 'circle' ? generateCirclePath(cells, margin, numCells / size * 2) : generatePath(cells, margin)));
+        ctx.fill(new Path2D(shape === 'circle' ? generateCirclePath(cells, margin, scale) : generatePath(cells, margin)));
       } else {
         forEach(cells, function (row, rdx) {
           forEach(row, function (cell, cdx) {
@@ -335,6 +337,7 @@ class QRCodeSVG extends React.PureComponent {
       includeMargin,
       imageSettings,
       shape,
+      thickness,
       ...otherProps
     } = this.props;
 
@@ -350,7 +353,8 @@ class QRCodeSVG extends React.PureComponent {
     const margin = includeMargin ? MARGIN_SIZE : 0;
     const numCells = cells.length + margin * 2;
     const calculatedImageSettings = getImageSettings(this.props, cells);
-    const scale = numCells / size * 2;
+    const pixelRatio = window.devicePixelRatio || 1;
+    const scale = (numCells / size) * pixelRatio * thickness;
 
     let image = null;
     if (imageSettings != null && calculatedImageSettings != null) {
