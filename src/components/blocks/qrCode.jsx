@@ -342,15 +342,16 @@ class QRCodeSVG extends React.PureComponent {
 
     return (
       <svg
-        shapeRendering='crispEdges'
+        shapeRendering='geometricPrecision'
         height={size}
         width={size}
         viewBox={`0 0 ${numCells} ${numCells}`}
+        xmlns='http://www.w3.org/2000/svg'
         {...otherProps}>
         <path fill={bgColor} d={`M0,0 h${numCells}v${numCells}H0z`} />
-        <path fill={fgColor} d={fgPath} />
+        <path fill={fgColor} d={fgPath} shapeRendering='geometricPrecision'/>
         {withCircleEyes &&
-        <svg style={{ zIndex: 100 }} viewBox={`0 0 ${numCells} ${numCells}`}>
+        <svg style={{ zIndex: 100 }} viewBox={`0 0 ${numCells} ${numCells}`} shapeRendering='geometricPrecision'>
           <rect x={margin} y={margin} height={`${cellPrecentage}%`} width={`${cellPrecentage}%`} fill={bgColor}></rect>
           <circle cx={`${halfOfCellPrecentage}%`} cy={`${halfOfCellPrecentage}%`} r={`${cellPrecentage / 3}%`} stroke={fgColor} strokeWidth={`${cellPrecentage / 8}%`} fill={bgColor}></circle>
           <circle cx={`${halfOfCellPrecentage}%`} cy={`${halfOfCellPrecentage}%`} r={`${cellPrecentage / 7}%`} fill={fgColor}></circle>
@@ -361,7 +362,7 @@ class QRCodeSVG extends React.PureComponent {
           <circle cx={`${halfOfCellPrecentage}%`} cy={`${100 - halfOfCellPrecentage}%`} r={`${cellPrecentage / 3}%`} stroke={fgColor} strokeWidth={`${cellPrecentage / 8}%`} fill={bgColor}></circle>
           <circle cx={`${halfOfCellPrecentage}%`} cy={`${100 - halfOfCellPrecentage}%`} r={`${cellPrecentage / 7}%`} fill={fgColor}></circle>
         </svg>}
-        {image}
+        {imageSettings.src && image}
       </svg>
     );
   }
