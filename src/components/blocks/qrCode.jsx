@@ -336,7 +336,7 @@ class QRCodeSVG extends React.PureComponent {
 
     const cellPrecentage = (100 / numCells) * 8;
 
-    const fgPath = shape === 'circle' ? generateCirclePath(cells, margin, 600 / cellPrecentage / 100, thickness) : generatePath(cells, margin);
+    const fgPath = shape === 'circle' ? generateCirclePath(cells, margin, (size - (margin * 4)) / cellPrecentage / 100, thickness) : generatePath(cells, margin);
 
     const halfOfCellPrecentage = cellPrecentage / 2;
 
