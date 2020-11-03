@@ -35,7 +35,7 @@ const PROP_TYPES =
 const MARGIN_SIZE = 4;
 const DEFAULT_IMG_SCALE = 0.1;
 
-const circlePath = (cx, cy, r) => `M ${cx} ${cy} m -${r}, 0 a ${r},${r} 0 1,0 ${r * 2},0 a ${r},${r} 0 1,0 -${r * 2},0`;
+const circlePath = (cx, cy, r) => `M ${cx + r} ${cy + r} m -${r}, 0 a ${r},${r} 0 1,0 ${r * 2},0 a ${r},${r} 0 1,0 -${r * 2},0`;
 
 const SUPPORTS_PATH2D = (function () {
   try {

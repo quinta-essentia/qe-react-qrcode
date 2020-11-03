@@ -79,12 +79,12 @@ function generatePath (modules, margin = 0) {
   return ops.join('');
 }
 
-function generateCirclePath (modules, margin = 0, radius) {
+function generateCirclePath (modules, margin = 0, radius, thickness) {
   const ops = [];
   forEach(modules, (row, y) => {
     forEach(row, (cell, x) => {
       if (cell) {
-        ops.push(circlePath(x + margin, y + margin, radius));
+        ops.push(circlePath(x + margin, y + margin, radius * thickness));
       }
     });
   });
@@ -315,8 +315,6 @@ class QRCodeSVG extends React.PureComponent {
     const margin = includeMargin ? MARGIN_SIZE : 0;
     const numCells = cells.length + margin * 2;
     const calculatedImageSettings = getImageSettings(this.props, cells);
-    const pixelRatio = window.devicePixelRatio || 1;
-    const scale = (numCells / size) * pixelRatio * thickness;
 
     let image = null;
     if (imageSettings != null && calculatedImageSettings != null) {
@@ -336,9 +334,9 @@ class QRCodeSVG extends React.PureComponent {
       );
     }
 
-    const fgPath = shape === 'circle' ? generateCirclePath(cells, margin, scale) : generatePath(cells, margin);
-
     const cellPrecentage = (100 / numCells) * 8;
+
+    const fgPath = shape === 'circle' ? generateCirclePath(cells, margin, 600 / cellPrecentage / 100, thickness) : generatePath(cells, margin);
 
     const halfOfCellPrecentage = cellPrecentage / 2;
 
