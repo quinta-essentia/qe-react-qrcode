@@ -299,6 +299,7 @@ class QRCodeSVG extends React.PureComponent {
       imageSettings,
       shape,
       thickness,
+      withCircleEyes,
       ...otherProps
     } = this.props;
 
@@ -337,6 +338,10 @@ class QRCodeSVG extends React.PureComponent {
 
     const fgPath = shape === 'circle' ? generateCirclePath(cells, margin, scale) : generatePath(cells, margin);
 
+    const cellPrecentage = (100 / numCells) * 8;
+
+    const halfOfCellPrecentage = cellPrecentage / 2;
+
     return (
       <svg
         shapeRendering='crispEdges'
@@ -346,6 +351,18 @@ class QRCodeSVG extends React.PureComponent {
         {...otherProps}>
         <path fill={bgColor} d={`M0,0 h${numCells}v${numCells}H0z`} />
         <path fill={fgColor} d={fgPath} />
+        {withCircleEyes &&
+        <svg style={{ zIndex: 100 }} viewBox={`0 0 ${numCells} ${numCells}`}>
+          <rect x={margin} y={margin} height={`${cellPrecentage}%`} width={`${cellPrecentage}%`} fill={bgColor}></rect>
+          <circle cx={`${halfOfCellPrecentage}%`} cy={`${halfOfCellPrecentage}%`} r={`${cellPrecentage / 3}%`} stroke={fgColor} strokeWidth={`${cellPrecentage / 8}%`} fill={bgColor}></circle>
+          <circle cx={`${halfOfCellPrecentage}%`} cy={`${halfOfCellPrecentage}%`} r={`${cellPrecentage / 7}%`} fill={fgColor}></circle>
+          <rect x={numCells - 7 - margin} y={margin} height={`${cellPrecentage}%`} width={`${cellPrecentage}%`} fill={bgColor}></rect>
+          <circle cx={`${100 - halfOfCellPrecentage}%`} cy={`${halfOfCellPrecentage}%`} r={`${cellPrecentage / 3}%`} stroke={fgColor} strokeWidth={`${cellPrecentage / 8}%`} fill={bgColor}></circle>
+          <circle cx={`${100 - halfOfCellPrecentage}%`} cy={`${halfOfCellPrecentage}%`} r={`${cellPrecentage / 7}%`} fill={fgColor}></circle>
+          <rect y={numCells - 8 - margin} x={margin} height={`${cellPrecentage}%`} width={`${cellPrecentage}%`} fill={bgColor}></rect>
+          <circle cx={`${halfOfCellPrecentage}%`} cy={`${100 - halfOfCellPrecentage}%`} r={`${cellPrecentage / 3}%`} stroke={fgColor} strokeWidth={`${cellPrecentage / 8}%`} fill={bgColor}></circle>
+          <circle cx={`${halfOfCellPrecentage}%`} cy={`${100 - halfOfCellPrecentage}%`} r={`${cellPrecentage / 7}%`} fill={fgColor}></circle>
+        </svg>}
         {image}
       </svg>
     );
