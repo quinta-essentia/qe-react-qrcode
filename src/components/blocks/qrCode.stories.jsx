@@ -1,7 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import QRCode from './qrCode.jsx';
 import {
   longTextKnob,
   numberKnob,
@@ -11,9 +10,11 @@ import {
   withKnobs
 } from '@storybook/utilities';
 
-storiesOf('RTFKT/Components/Blocks/qrCode', module)
+import QRCode from './qrCode.jsx';
+
+storiesOf('qrCode', module)
   .addDecorator(withKnobs)
-  .add('QRCODE', () => (
+  .add('Default', () => (
     <QRCode
       value={longTextKnob({ label: 'Value or URL', defaultValue: 'http://facebook.github.io/react/' })}
       size={numberKnob({ label: 'Size', defaultValue: 256 })}
