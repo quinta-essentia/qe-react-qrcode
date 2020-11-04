@@ -91,6 +91,19 @@ function generateCirclePath (modules, margin = 0, radius, thickness) {
   return ops.join('');
 }
 
+// eslint-disable-next-line no-unused-vars
+function generatePathObjects (modules, width) {
+  const ops = [];
+  forEach(modules, (row, y) => {
+    forEach(row, (cell, x) => {
+      if (cell) {
+        ops.push({ x, y, width });
+      }
+    });
+  });
+  return ops;
+}
+
 function excavateModules (modules, excavation) {
   return map(modules.slice(), (row, y) => {
     if (y < excavation.y || y >= excavation.y + excavation.h) {
