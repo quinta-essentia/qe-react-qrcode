@@ -48,7 +48,7 @@ const saveSVGbyID = (ID) => {
 };
 
 const QRCodeBodyShapeCircle = ({ cx, cy, width, color }) => (
-  <circle cx={cx} cy={cy} r={width / 2} fill={color} />
+  <circle cx={cx + width / 2} cy={cy + width / 2} r={width / 2} fill={color} />
 );
 
 const QRCodeBodyShapeSquere = ({ cx, cy, width, color }) => (
@@ -57,8 +57,8 @@ const QRCodeBodyShapeSquere = ({ cx, cy, width, color }) => (
 
 const QRCodeEyeShapeCircle = ({ x, y, width, color, bgColor }) => (
   <g>
-    <circle cx={x} cy={y} r={width * 3} stroke={color} strokeWidth={width / 1.5} fill={bgColor} />
-    <circle cx={x} cy={y} r={width * 2} fill={color} />
+    <circle cx={x + width / 2} cy={y + width / 2} r={width * 3} stroke={color} strokeWidth={width / 1.5} fill={bgColor} />
+    <circle cx={x + width / 2} cy={y + width / 2} r={width * 2} fill={color} />
   </g>
 );
 
