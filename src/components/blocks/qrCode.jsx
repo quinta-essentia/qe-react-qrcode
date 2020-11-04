@@ -34,12 +34,31 @@ function convertStr (str) {
   return out;
 }
 
+const QRCodeBodyShapeCircle = ({ cx, cy, width, color }) => (
+  <circle cx={cx} cy={cy} r={width / 2} fill={color} />
+);
+
+const QRCodeBodyShapeSquere = ({ cx, cy, width, color }) => (
+  <rect fill={color} />
+);
+
+const QRCodeEyeShapeCircle = ({ cx, cy, width, color }) => (
+  <circle fill={color} />
+);
+
+const QRCodeEyeShapeSquere = ({ cx, cy, width, color }) => (
+  <rect fill={color} />
+);
+
 const QRCode = ({
+  bgColor,
+  fgColor,
   level,
   size,
   value,
 }) => {
   console.log('value', value);
+  const pointWidth = 5;
 
   const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
   qrcode.addData(convertStr(value));
@@ -49,27 +68,37 @@ const QRCode = ({
 
   console.log('matrix', matrixSize, qrcode.modules);
 
-  
-
   return (
-    <svg viewBox={`0 0 ${(matrixSize + 1) * 5} ${(matrixSize + 1) * 5}`} width={`${size}px`} height={`${size}px`}>
-      {map(
-        qrcode.modules,
-        (row, rIndex) => map(
-          row,
-          (col, cIndex) => {
-            console.log('point', rIndex, cIndex, col);
+    <svg
+      viewBox={`0 0 ${(matrixSize + 1) * pointWidth} ${(matrixSize + 1) * pointWidth}`}
+      width={`${size}px`}
+      height={`${size}px`}
+      style={{ backgroundColor: bgColor }}
+    >
+      <g id='points' >
+        {map(
+          qrcode.modules,
+          (row, rIndex) => map(
+            row,
+            (col, cIndex) => {
+              console.log('point', rIndex, cIndex, col);
 
-            if (col) {
-              return (
-                <circle cx={(rIndex + 1) * 5} cy={(cIndex + 1) * 5} r='2.5' fill='black' />
-              )
+              if (col) {
+                return (
+                  <QRCodeBodyShapeCircle cx={(rIndex + 1) * pointWidth} cy={(cIndex + 1) * pointWidth} width={pointWidth} color={fgColor} />
+                )
+              }
+
+              return noop();
             }
-
-            return noop();
-          }
-        )
-      )}
+          )
+        )}
+      </g>
+      <g id='eyes'>
+        <QRCodeEyeShapeCircle />
+        <QRCodeEyeShapeCircle />
+        <QRCodeEyeShapeCircle />
+      </g>
     </svg>
   );
 };
