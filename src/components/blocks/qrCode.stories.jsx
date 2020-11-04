@@ -24,6 +24,7 @@ storiesOf('qrCode', module)
       includeMargin={booleanKnob({ label: 'Include Margin', defaultValue: false })}
       renderAs={selectKnob({ label: 'Render as', options: { svg: 'svg', canvas: 'canvas' }, defaultValue: 'svg' })}
       shape={selectKnob({ label: 'Shape', options: { circle: 'circle', quadrant: 'quadrant' }, defaultValue: 'quadrant' })}
+      eyeShape={selectKnob({ label: 'Shape', options: { circle: 'circle', quadrant: 'quadrant' }, defaultValue: 'quadrant' })}
       thickness={numberKnob({ label: 'Thickness', defaultValue: 1 })}
       withCircleEyes={booleanKnob({ label: 'With Custom Eyes', defaultValue: false })}
       imageSettings={{

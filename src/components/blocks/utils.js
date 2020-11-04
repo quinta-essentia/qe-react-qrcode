@@ -32,6 +32,13 @@ const PROP_TYPES =
     }
     : {};
 
+const SHAPE_PROP_TYPES = {
+  cx: PropTypes.number.isRequired,
+  cy: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired,
+  color: PropTypes.string.isRequired,
+};
+
 const MARGIN_SIZE = 4;
 const DEFAULT_IMG_SCALE = 0.1;
 
@@ -53,4 +60,5 @@ export {
   MARGIN_SIZE,
   DEFAULT_IMG_SCALE,
   SUPPORTS_PATH2D,
+  SHAPE_PROP_TYPES,
 };

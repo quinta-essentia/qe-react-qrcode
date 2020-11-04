@@ -6,7 +6,11 @@ import map from 'lodash/map';
 
 import QRCodeImpl from 'qr.js/lib/QRCode';
 import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel';
-import { noop } from 'lodash';
+import noop from 'lodash/noop';
+import includes from 'lodash/includes';
+import {
+  SHAPE_PROP_TYPES
+} from './utils';
 
 function convertStr (str) {
   let out = '';
@@ -34,28 +38,51 @@ function convertStr (str) {
   return out;
 }
 
+const saveSVGbyID = (ID) => {
+  const svg = document.getElementById(ID);
+  const serializer = new XMLSerializer();
+  const ref = window.open();
+  ref.document.open();
+  ref.document.write(serializer.serializeToString(svg));
+  ref.document.close();
+};
+
 const QRCodeBodyShapeCircle = ({ cx, cy, width, color }) => (
   <circle cx={cx} cy={cy} r={width / 2} fill={color} />
 );
 
 const QRCodeBodyShapeSquere = ({ cx, cy, width, color }) => (
-  <rect fill={color} />
+  <rect x={cx} y={cy} width={width} height={width} fill={color} />
 );
 
-const QRCodeEyeShapeCircle = ({ cx, cy, width, color }) => (
-  <circle fill={color} />
+const QRCodeEyeShapeCircle = ({ x, y, width, color, bgColor }) => (
+  <g>
+    <circle cx={x} cy={y} r={width * 3} stroke={color} strokeWidth={width / 1.5} fill={bgColor} />
+    <circle cx={x} cy={y} r={width * 2} fill={color} />
+  </g>
 );
 
-const QRCodeEyeShapeSquere = ({ cx, cy, width, color }) => (
-  <rect fill={color} />
+const QRCodeEyeShapeSquere = ({ x, y, width, color, bgColor }) => (
+  <g>
+    <rect x={x + width} y={y + width} width={width * 7} height={width * 7} fill={color} />
+    <rect x={x + (width * 2.5)} y={y + (width * 2.5)} stroke={bgColor} strokeWidth={width} width={width * 4} height={width * 4} fill={color} />
+  </g>
 );
+
+QRCodeBodyShapeCircle.propTypes = SHAPE_PROP_TYPES;
+QRCodeBodyShapeSquere.propTypes = SHAPE_PROP_TYPES;
+QRCodeEyeShapeCircle.propTypes = SHAPE_PROP_TYPES;
+QRCodeEyeShapeSquere.propTypes = SHAPE_PROP_TYPES;
 
 const QRCode = ({
   bgColor,
   fgColor,
   level,
+  shape,
+  eyeShape,
   size,
   value,
+  id = 'svgID',
 }) => {
   console.log('value', value);
   const pointWidth = 5;
@@ -66,6 +93,15 @@ const QRCode = ({
 
   const matrixSize = qrcode.modules.length;
 
+  const frontEyeBallsXCoordinates = [0, 1, 2, 3, 4, 5, 6];
+  const frontEyeBallsYCoordinates = [0, 1, 2, 3, 4, 5, 6];
+  const backEyeBallsXCoordinates = [matrixSize - 1, matrixSize - 2, matrixSize - 3, matrixSize - 4, matrixSize - 5, matrixSize - 6, matrixSize - 7];
+  const backEyeBallsYCoordinates = [matrixSize - 1, matrixSize - 2, matrixSize - 3, matrixSize - 4, matrixSize - 5, matrixSize - 6, matrixSize - 7];
+
+  const isEyeBallsPosition = (x, y) => includes([...frontEyeBallsXCoordinates, ...backEyeBallsXCoordinates], x) &&
+   includes([...frontEyeBallsYCoordinates, ...backEyeBallsYCoordinates], y) &&
+   !(includes(backEyeBallsXCoordinates, x) && includes(backEyeBallsYCoordinates, y));
+
   console.log('matrix', matrixSize, qrcode.modules);
 
   return (
@@ -74,6 +110,8 @@ const QRCode = ({
       width={`${size}px`}
       height={`${size}px`}
       style={{ backgroundColor: bgColor }}
+      id={id}
+      onClick={() => saveSVGbyID(id)}
     >
       <g id='points' >
         {map(
@@ -83,10 +121,11 @@ const QRCode = ({
             (col, cIndex) => {
               console.log('point', rIndex, cIndex, col);
 
-              if (col) {
+              if (col && !isEyeBallsPosition(rIndex, cIndex)) {
                 return (
-                  <QRCodeBodyShapeCircle cx={(rIndex + 1) * pointWidth} cy={(cIndex + 1) * pointWidth} width={pointWidth} color={fgColor} />
-                )
+                  shape === 'circle' ? <QRCodeBodyShapeCircle cx={(rIndex + 1) * pointWidth} cy={(cIndex + 1) * pointWidth} width={pointWidth} color={fgColor} />
+                    : <QRCodeBodyShapeSquere cx={(rIndex + 1) * pointWidth} cy={(cIndex + 1) * pointWidth} width={pointWidth} color={fgColor} />
+                );
               }
 
               return noop();
@@ -94,11 +133,18 @@ const QRCode = ({
           )
         )}
       </g>
-      <g id='eyes'>
-        <QRCodeEyeShapeCircle />
-        <QRCodeEyeShapeCircle />
-        <QRCodeEyeShapeCircle />
-      </g>
+      {eyeShape === 'circle'
+        ? <g id='eyes'>
+          <QRCodeEyeShapeCircle bgColor={bgColor} color={fgColor} x={(8.5 * pointWidth) / 2} y={(8.5 * pointWidth) / 2} width={pointWidth}/>
+          <QRCodeEyeShapeCircle bgColor={bgColor} color={fgColor} x={(matrixSize - 3.5) * pointWidth} y={(8.5 * pointWidth) / 2} width={pointWidth}/>
+          <QRCodeEyeShapeCircle bgColor={bgColor} color={fgColor} x={(8.5 * pointWidth) / 2} y={(matrixSize - 3.5) * pointWidth} width={pointWidth}/>
+        </g>
+        : <g id='eyes'>
+          <QRCodeEyeShapeSquere bgColor={bgColor} color={fgColor} x={0} y={0} width={pointWidth}/>
+          <QRCodeEyeShapeSquere bgColor={bgColor} color={fgColor} x={(matrixSize - 7) * pointWidth} y={0} width={pointWidth}/>
+          <QRCodeEyeShapeSquere bgColor={bgColor} color={fgColor} x={0} y={(matrixSize - 7) * pointWidth} width={pointWidth}/>
+        </g>}
+
     </svg>
   );
 };
@@ -113,8 +159,6 @@ export default QRCode;
 //   DEFAULT_IMG_SCALE,
 //   SUPPORTS_PATH2D,
 // } from './utils';
-
-
 
 // function generatePath (modules, margin = 0) {
 //   const ops = [];
