@@ -57,8 +57,8 @@ const QRCodeBodyShapeSquere = ({ cx, cy, width, color }) => (
 
 const QRCodeEyeShapeCircle = ({ x, y, width, color, bgColor }) => (
   <g>
-    <circle cx={x + width / 2} cy={y + width / 2} r={width * 3} stroke={color} strokeWidth={width / 1.5} fill={bgColor} />
-    <circle cx={x + width / 2} cy={y + width / 2} r={width * 2} fill={color} />
+    <circle cx={x + width / 2} cy={y + width / 2} r={width * 3} stroke={color} strokeWidth={width} fill={bgColor} />
+    <circle cx={x + width / 2} cy={y + width / 2} r={width * 1.5} fill={color} />
   </g>
 );
 
