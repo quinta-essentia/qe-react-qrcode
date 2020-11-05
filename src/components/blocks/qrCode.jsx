@@ -9,9 +9,12 @@ import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel';
 import noop from 'lodash/noop';
 import includes from 'lodash/includes';
 import replace from 'lodash/replace';
+import concat from 'lodash/concat';
 import {
   SHAPE_PROP_TYPES,
-  parseStyles
+  parseStyles,
+  calculateImagePosition,
+  calculateExcavationPositions,
 } from './utils';
 
 function convertStr (str) {
@@ -92,6 +95,11 @@ const QRCode = ({
   shape,
   eyeShape,
   size,
+  imageSrc,
+  imageWidth,
+  imageHeight,
+  imagePosition,
+  imageExcavate,
   value,
   id = 'svgID',
 }) => {
@@ -108,12 +116,33 @@ const QRCode = ({
   const frontEyeBallsYCoordinates = [0, 1, 2, 3, 4, 5, 6];
   const backEyeBallsXCoordinates = [matrixSize - 1, matrixSize - 2, matrixSize - 3, matrixSize - 4, matrixSize - 5, matrixSize - 6, matrixSize - 7];
   const backEyeBallsYCoordinates = [matrixSize - 1, matrixSize - 2, matrixSize - 3, matrixSize - 4, matrixSize - 5, matrixSize - 6, matrixSize - 7];
+  let excavationCoordinates;
 
-  const isEyeBallsPosition = (x, y) => includes([...frontEyeBallsXCoordinates, ...backEyeBallsXCoordinates], x) &&
-   includes([...frontEyeBallsYCoordinates, ...backEyeBallsYCoordinates], y) &&
+  let image = null;
+  if (imageSrc) {
+    const { x, y } = calculateImagePosition({ imagePosition, imageWidth, imageHeight, pointWidth, matrixSize });
+
+    if (imageExcavate) {
+      excavationCoordinates = calculateExcavationPositions({ position: { x: x, y: y }, imageWidth, imageHeight, pointWidth, matrixSize });
+    }
+
+    image = (
+      <image
+        xlinkHref={imageSrc}
+        height={imageHeight}
+        width={imageWidth}
+        x={x + pointWidth}
+        y={y + pointWidth}
+        preserveAspectRatio='none'
+      />
+    );
+  }
+
+  const isEyeBallsPosition = (x, y) => includes(concat(frontEyeBallsXCoordinates, backEyeBallsXCoordinates), x) &&
+   includes(concat(frontEyeBallsYCoordinates, backEyeBallsYCoordinates), y) &&
    !(includes(backEyeBallsXCoordinates, x) && includes(backEyeBallsYCoordinates, y));
 
-  console.log('matrix', matrixSize, qrcode.modules);
+  const isExcavatedPosition = (x, y) => excavationCoordinates && includes(excavationCoordinates.excationPositionsX, x) && includes(excavationCoordinates.excationPositionsY, y);
 
   return (
     <svg
@@ -132,7 +161,7 @@ const QRCode = ({
             (col, cIndex) => {
               console.log('point', rIndex, cIndex, col);
 
-              if (col && !isEyeBallsPosition(rIndex, cIndex)) {
+              if (col && !isEyeBallsPosition(rIndex, cIndex) && !isExcavatedPosition(rIndex, cIndex)) {
                 return (
                   shape === 'circle' ? <QRCodeBodyShapeCircle cx={(rIndex + 1) * pointWidth} cy={(cIndex + 1) * pointWidth} width={pointWidth} color={fgColor} />
                     : <QRCodeBodyShapeSquere cx={(rIndex + 1) * pointWidth} cy={(cIndex + 1) * pointWidth} width={pointWidth} color={fgColor} />
@@ -155,7 +184,7 @@ const QRCode = ({
           <QRCodeEyeShapeSquere bgColor={bgColor} color={fgColor} x={(matrixSize - 7) * pointWidth} y={0} width={pointWidth}/>
           <QRCodeEyeShapeSquere bgColor={bgColor} color={fgColor} x={0} y={(matrixSize - 7) * pointWidth} width={pointWidth}/>
         </g>}
-
+      {imageSrc && image}
     </svg>
   );
 };

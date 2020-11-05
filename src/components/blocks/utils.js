@@ -96,9 +96,45 @@ const parseStyles = function (svg) {
   }
 };
 
+const calculateImagePosition = ({ imagePosition, imageWidth, imageHeight, pointWidth, matrixSize }) => {
+  const gridCells = matrixSize * pointWidth;
+  switch (imagePosition) {
+    case 'TOP':
+      return { x: gridCells / 2 - imageWidth / 2, y: 0 };
+    case 'BOTTOM':
+      return { x: gridCells / 2 - imageWidth / 2, y: gridCells - imageHeight };
+    case 'RIGHT':
+      return { x: gridCells - imageWidth, y: gridCells / 2 - imageHeight / 2 };
+    case 'LEFT':
+      return { x: 0, y: gridCells / 2 - imageHeight / 2 };
+    default: return { x: gridCells / 2 - imageWidth / 2, y: gridCells / 2 - imageHeight / 2 };
+  }
+};
+
+const calculateExcavationPositions = ({ position: { x, y }, imageWidth, imageHeight, pointWidth }) => {
+  const numOfExcavatedXCells = Math.ceil(imageWidth / pointWidth) + 1;
+  const numOfExcavatedYCells = Math.ceil(imageHeight / pointWidth) + 1;
+  const imageStartingXIndex = Math.floor(x / pointWidth);
+  const imageStartingYIndex = Math.floor(y / pointWidth);
+  const excationPositionsX = [];
+  const excationPositionsY = [];
+  for (let i = 0; i < numOfExcavatedXCells; i++) {
+    excationPositionsX.push(imageStartingXIndex + i);
+  }
+  for (let i = 0; i < numOfExcavatedYCells; i++) {
+    excationPositionsY.push(imageStartingYIndex + i);
+  }
+  return {
+    excationPositionsX,
+    excationPositionsY,
+  };
+};
+
 export {
   circlePath,
   parseStyles,
+  calculateImagePosition,
+  calculateExcavationPositions,
   DEFAULT_PROPS,
   PROP_TYPES,
   MARGIN_SIZE,
