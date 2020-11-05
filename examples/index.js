@@ -1,4 +1,4 @@
-const QRCode = require('../src/components/blocks/qrCode');
+const QRCode = require('../src/qrCode');
 const React = require('react');
 const ReactDOM = require('react-dom');
 

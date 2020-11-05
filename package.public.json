@@ -24,7 +24,7 @@
         "react-router": "5.1.2",
         "react-router-dom": "5.1.2"
     },
-    "author": "Petar Basic <petarbasic1910@gmail.com>",
+    "author": "QuintaEssentia <github@quintaessentia.rs>",
     "homepage": "https://github.com/quinta-essentia/qe-react-qrcode",
     "repository": {
         "type": "git",

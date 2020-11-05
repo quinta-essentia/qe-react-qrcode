@@ -33,20 +33,6 @@ const SHAPE_PROP_TYPES = {
   color: PropTypes.string.isRequired,
 };
 
-const MARGIN_SIZE = 4;
-const DEFAULT_IMG_SCALE = 0.1;
-
-const circlePath = (cx, cy, r) => `M ${cx + r} ${cy + r} m -${r}, 0 a ${r},${r} 0 1,0 ${r * 2},0 a ${r},${r} 0 1,0 -${r * 2},0`;
-
-const SUPPORTS_PATH2D = (function () {
-  try {
-    new Path2D().addPath(new Path2D());
-  } catch (e) {
-    return false;
-  }
-  return true;
-})();
-
 const parseStyles = function (svg) {
   const styleSheets = [];
   const docStyles = svg.ownerDocument.styleSheets;
@@ -125,14 +111,10 @@ const calculateExcavationPositions = ({ position: { x, y }, imageWidth, imageHei
 };
 
 export {
-  circlePath,
   parseStyles,
   calculateImagePosition,
   calculateExcavationPositions,
   DEFAULT_PROPS,
   PROP_TYPES,
-  MARGIN_SIZE,
-  DEFAULT_IMG_SCALE,
-  SUPPORTS_PATH2D,
   SHAPE_PROP_TYPES,
 };
