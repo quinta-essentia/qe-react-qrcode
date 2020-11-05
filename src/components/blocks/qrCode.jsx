@@ -8,8 +8,10 @@ import QRCodeImpl from 'qr.js/lib/QRCode';
 import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel';
 import noop from 'lodash/noop';
 import includes from 'lodash/includes';
+import replace from 'lodash/replace';
 import {
-  SHAPE_PROP_TYPES
+  SHAPE_PROP_TYPES,
+  parseStyles
 } from './utils';
 
 function convertStr (str) {
@@ -38,13 +40,22 @@ function convertStr (str) {
   return out;
 }
 
-const saveSVGbyID = (ID) => {
+const downloadSvg = (ID) => {
   const svg = document.getElementById(ID);
-  const serializer = new XMLSerializer();
-  const ref = window.open();
-  ref.document.open();
-  ref.document.write(serializer.serializeToString(svg));
-  ref.document.close();
+  const clone = svg.cloneNode(true);
+  parseStyles(clone);
+
+  const svgDocType = document.implementation.createDocumentType('svg', '-//W3C//DTD SVG 1.1//EN', 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd');
+  const svgDoc = document.implementation.createDocument('http://www.w3.org/2000/svg', 'svg', svgDocType);
+  svgDoc.replaceChild(clone, svgDoc.documentElement);
+  const svgData = (new XMLSerializer()).serializeToString(svgDoc);
+
+  const a = document.createElement('a');
+  a.href = 'data:image/svg+xml; charset=utf8, ' + encodeURIComponent(replace(svgData, /></g, '>\n\r<'));
+  a.download = 'quintaEssentiaQRCodeGenerator.svg';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 };
 
 const QRCodeBodyShapeCircle = ({ cx, cy, width, color }) => (
@@ -111,7 +122,7 @@ const QRCode = ({
       height={`${size}px`}
       style={{ backgroundColor: bgColor }}
       id={id}
-      onClick={() => saveSVGbyID(id)}
+      onClick={() => downloadSvg(id)}
     >
       <g id='points' >
         {map(
