@@ -10,7 +10,9 @@
     "lint": "./node_modules/.bin/eslint \"./.storybook/*.js\" \"./**/*.js\" \"./**/*.jsx\"",
     "pre-commit": "npm run lint",
     "storybook": "start-storybook -p 6006 --no-dll",
-    "build-storybook": "build-storybook --no-dll"
+    "build-storybook": "build-storybook --no-dll",
+    "prepublish-docs": "make clean && make all",
+    "publish-docs": "gh-pages --dist=examples --src='{index.html,bundle.js}'"
   },
   "author": "QuintaEssentia <github@quintaessentia.rs>",
   "homepage": "https://github.com/quinta-essentia/qe-react-qrcode",
@@ -29,6 +31,7 @@
     "@storybook/addon-storyshots-puppeteer": "5.3.18",
     "@storybook/addon-storysource": "5.3.18",
     "classnames": "2.2.6",
+    "gh-pages": "^3.1.0",
     "history": "5.0.0",
     "lodash": "4.17.15",
     "numeral": "2.0.6",
