@@ -1,36 +1,30 @@
 import PropTypes from 'prop-types';
 
 const DEFAULT_PROPS = {
-  size: 128,
-  level: 'L',
   bgColor: '#FFFFFF',
+  eyeShape: 'quadrant',
   fgColor: '#000000',
-  includeMargin: false,
+  id: 'svgID',
+  level: 'L',
   shape: 'quadrant',
-  thickness: 1,
+  size: 256,
 };
 
-const PROP_TYPES =
-  process.env.NODE_ENV !== 'production'
-    ? {
-      value: PropTypes.string.isRequired,
-      size: PropTypes.number,
-      level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-      bgColor: PropTypes.string,
-      fgColor: PropTypes.string,
-      includeMargin: PropTypes.bool,
-      shape: PropTypes.oneOf(['circle', 'quadrant']),
-      thickness: PropTypes.number,
-      imageSettings: PropTypes.shape({
-        src: PropTypes.string.isRequired,
-        height: PropTypes.number.isRequired,
-        width: PropTypes.number.isRequired,
-        excavate: PropTypes.bool,
-        x: PropTypes.number,
-        y: PropTypes.number,
-      }),
-    }
-    : {};
+const PROP_TYPES = {
+  bgColor: PropTypes.string,
+  eyeShape: PropTypes.oneOf(['circle', 'quadrant']),
+  fgColor: PropTypes.string,
+  id: PropTypes.string,
+  imageExcavate: PropTypes.bool,
+  imageHeight: PropTypes.number,
+  imagePosition: PropTypes.oneOf(['TOP', 'BOTTOM', 'LEFT', 'RIGHT', 'CENTER']),
+  imageSrc: PropTypes.string,
+  imageWidth: PropTypes.number,
+  level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
+  shape: PropTypes.oneOf(['circle', 'quadrant']),
+  size: PropTypes.number,
+  value: PropTypes.string.isRequired,
+};
 
 const SHAPE_PROP_TYPES = {
   cx: PropTypes.number.isRequired,

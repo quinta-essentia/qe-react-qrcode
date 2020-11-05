@@ -1,20 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
-// import forEach from 'lodash/forEach';
-import map from 'lodash/map';
 
 import QRCodeImpl from 'qr.js/lib/QRCode';
 import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel';
+
 import noop from 'lodash/noop';
+import map from 'lodash/map';
 import includes from 'lodash/includes';
 import replace from 'lodash/replace';
 import concat from 'lodash/concat';
 import {
-  SHAPE_PROP_TYPES,
-  parseStyles,
-  calculateImagePosition,
   calculateExcavationPositions,
+  calculateImagePosition,
+  DEFAULT_PROPS,
+  parseStyles,
+  PROP_TYPES,
+  SHAPE_PROP_TYPES,
 } from './utils';
 
 function convertStr (str) {
@@ -101,7 +101,7 @@ const QRCode = ({
   imagePosition,
   imageExcavate,
   value,
-  id = 'svgID',
+  id,
 }) => {
   console.log('value', value);
   const pointWidth = 5;
@@ -159,8 +159,6 @@ const QRCode = ({
           (row, rIndex) => map(
             row,
             (col, cIndex) => {
-              console.log('point', rIndex, cIndex, col);
-
               if (col && !isEyeBallsPosition(rIndex, cIndex) && !isExcavatedPosition(rIndex, cIndex)) {
                 return (
                   shape === 'circle' ? <QRCodeBodyShapeCircle cx={(rIndex + 1) * pointWidth} cy={(cIndex + 1) * pointWidth} width={pointWidth} color={fgColor} />
@@ -188,6 +186,10 @@ const QRCode = ({
     </svg>
   );
 };
+
+QRCode.propTypes = PROP_TYPES;
+
+QRCode.defaultProps = DEFAULT_PROPS;
 
 export default QRCode;
 
