@@ -1,39 +1,52 @@
-import PropTypes from 'prop-types';
+import replace from 'lodash/replace';
 
-const DEFAULT_PROPS = {
-  bgColor: '#FFFFFF',
-  eyeShape: 'quadrant',
-  fgColor: '#000000',
-  id: 'svgID',
-  level: 'L',
-  shape: 'quadrant',
-  size: 256,
+const convertStr = (str) => {
+  let out = '';
+
+  for (let i = 0; i < str.length; i++) {
+    let charcode = str.charCodeAt(i);
+    if (charcode < 0x0080) {
+      out += String.fromCharCode(charcode);
+    } else if (charcode < 0x0800) {
+      out += String.fromCharCode(0xc0 | (charcode >> 6));
+      out += String.fromCharCode(0x80 | (charcode & 0x3f));
+    } else if (charcode < 0xd800 || charcode >= 0xe000) {
+      out += String.fromCharCode(0xe0 | (charcode >> 12));
+      out += String.fromCharCode(0x80 | ((charcode >> 6) & 0x3f));
+      out += String.fromCharCode(0x80 | (charcode & 0x3f));
+    } else {
+      i++;
+      charcode =
+        0x10000 + (((charcode & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff));
+      out += String.fromCharCode(0xf0 | (charcode >> 18));
+      out += String.fromCharCode(0x80 | ((charcode >> 12) & 0x3f));
+      out += String.fromCharCode(0x80 | ((charcode >> 6) & 0x3f));
+      out += String.fromCharCode(0x80 | (charcode & 0x3f));
+    }
+  }
+
+  return out;
 };
 
-const PROP_TYPES = {
-  bgColor: PropTypes.string,
-  eyeShape: PropTypes.oneOf(['circle', 'quadrant']),
-  fgColor: PropTypes.string,
-  id: PropTypes.string,
-  imageExcavate: PropTypes.bool,
-  imageHeight: PropTypes.number,
-  imagePosition: PropTypes.oneOf(['TOP', 'BOTTOM', 'LEFT', 'RIGHT', 'CENTER']),
-  imageSrc: PropTypes.string,
-  imageWidth: PropTypes.number,
-  level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-  shape: PropTypes.oneOf(['circle', 'quadrant']),
-  size: PropTypes.number,
-  value: PropTypes.string.isRequired,
+const downloadAsSvg = (id) => {
+  const svg = document.getElementById(id);
+  const clone = svg.cloneNode(true);
+  parseStyles(clone);
+
+  const svgDocType = document.implementation.createDocumentType('svg', '-//W3C//DTD SVG 1.1//EN', 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd');
+  const svgDoc = document.implementation.createDocument('http://www.w3.org/2000/svg', 'svg', svgDocType);
+  svgDoc.replaceChild(clone, svgDoc.documentElement);
+  const svgData = (new XMLSerializer()).serializeToString(svgDoc);
+
+  const a = document.createElement('a');
+  a.href = 'data:image/svg+xml; charset=utf8, ' + encodeURIComponent(replace(svgData, /></g, '>\n\r<'));
+  a.download = `${id}.svg`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 };
 
-const SHAPE_PROP_TYPES = {
-  cx: PropTypes.number.isRequired,
-  cy: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
-  color: PropTypes.string.isRequired,
-};
-
-const parseStyles = function (svg) {
+const parseStyles = (svg) => {
   const styleSheets = [];
   const docStyles = svg.ownerDocument.styleSheets;
   for (let i = 0; i < docStyles.length; i++) {
@@ -111,10 +124,9 @@ const calculateExcavationPositions = ({ position: { x, y }, imageWidth, imageHei
 };
 
 export {
-  parseStyles,
-  calculateImagePosition,
   calculateExcavationPositions,
-  DEFAULT_PROPS,
-  PROP_TYPES,
-  SHAPE_PROP_TYPES,
+  calculateImagePosition,
+  convertStr,
+  downloadAsSvg,
+  parseStyles,
 };

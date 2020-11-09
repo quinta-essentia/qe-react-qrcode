@@ -1,1 +1,5 @@
-export * from './src';
+import QRCode from './src/qrCode';
+
+export {
+  QRCode,
+};

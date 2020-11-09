@@ -1,32 +1,31 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-
 import {
-  longTextKnob,
-  numberKnob,
-  selectKnob,
-  colorKnob,
-  booleanKnob,
-  withKnobs
-} from '@storybook/utilities';
+  boolean,
+  color,
+  number,
+  select,
+  text,
+  withKnobs,
+} from '@storybook/addon-knobs';
 
 import QRCode from './qrCode.jsx';
 
-storiesOf('qrCode', module)
+storiesOf('QRCode', module)
   .addDecorator(withKnobs)
   .add('Default', () => (
     <QRCode
-      value={longTextKnob({ label: 'Value or URL', defaultValue: 'http://facebook.github.io/react/' })}
-      size={numberKnob({ label: 'Size', defaultValue: 256 })}
-      level={selectKnob({ label: 'Level', options: { L: 'L', M: 'M', Q: 'Q', H: 'H' }, defaultValue: 'L' })}
-      bgColor={colorKnob({ label: 'Background Color', defaultValue: 'rgb(255,255,255)' })}
-      fgColor={colorKnob({ label: 'Foreground Color', defaultValue: 'rgb(0,0,0)' })}
-      shape={selectKnob({ label: 'Shape', options: { circle: 'circle', quadrant: 'quadrant' }, defaultValue: 'quadrant' })}
-      eyeShape={selectKnob({ label: 'Eye shape', options: { circle: 'circle', quadrant: 'quadrant' }, defaultValue: 'quadrant' })}
-      imageSrc={longTextKnob({ label: 'Image source', defaultValue: 'https://emoji.slack-edge.com/T8C69ARQV/quintaessentia/6e9e7ed89c376844.png' })}
-      imageWidth={numberKnob({ label: 'Image width', defaultValue: 80 })}
-      imageHeight={numberKnob({ label: 'Image height', defaultValue: 80 })}
-      imagePosition={selectKnob({ label: 'Image Position', options: { TOP: 'TOP', BOTTOM: 'BOTTOM', RIGHT: 'RIGHT', LEFT: 'LEFT', CENTER: 'CENTER' }, defaultValue: 'CENTER' })}
-      imageExcavate={booleanKnob({ label: 'Excavate', defaultValue: false })}
+      value={text('Value or URL', 'http://facebook.github.io/react/')}
+      size={number('Size', 256)}
+      level={select('Level', { L: 'L', M: 'M', Q: 'Q', H: 'H' }, 'M')}
+      bgColor={color('Background Color', 'rgb(255,255,255)')}
+      fgColor={color('Foreground Color', 'rgb(0,0,0)')}
+      shape={select('Shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
+      eyeShape={select('Eye shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
+      imageSrc={text('Image source', 'https://emoji.slack-edge.com/T8C69ARQV/quintaessentia/6e9e7ed89c376844.png')}
+      imageWidth={number('Image width', 40)}
+      imageHeight={number('Image height', 40)}
+      imagePosition={select('Image Position', { TOP: 'TOP', BOTTOM: 'BOTTOM', RIGHT: 'RIGHT', LEFT: 'LEFT', CENTER: 'CENTER' }, 'CENTER')}
+      imageExcavate={boolean('Excavate', true)}
     />
   ));
