@@ -53,6 +53,33 @@ const downloadAsPng = (id) => {
   // CORS is blocking download cuz it's http on local.
 };
 
+const imageDimensions = file =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+
+    // the following handler will fire after the successful loading of the image
+    img.onload = () => {
+      const { naturalWidth: width, naturalHeight: height } = img;
+      resolve({ width, height });
+    };
+
+    // and this handler will fire if there was an error with the image (like if it's not really an image or a corrupted one)
+    img.onerror = (err) => {
+      reject(new Error('There was some problem with the image.', err));
+    };
+
+    img.src = file;
+  });
+
+const getDimensions = async (file) => {
+  try {
+    const dimensions = await imageDimensions(file);
+    return dimensions;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const downloadAsPdf = (id) => {
   const svg = document.getElementById(id);
   svgAsDataUri(svg, {}, function (svgUri) {
@@ -170,4 +197,5 @@ export {
   downloadAsPng,
   downloadAsPdf,
   parseStyles,
+  getDimensions,
 };
