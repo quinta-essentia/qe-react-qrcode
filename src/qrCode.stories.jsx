@@ -8,24 +8,37 @@ import {
   text,
   withKnobs,
 } from '@storybook/addon-knobs';
+import quintaImg from '../quinta.png';
 
 import QRCode from './qrCode.jsx';
+
+import {
+  downloadAsSvg,
+  downloadAsPng,
+  downloadAsPdf
+} from './utils';
 
 storiesOf('QRCode', module)
   .addDecorator(withKnobs)
   .add('Default', () => (
-    <QRCode
-      value={text('Value or URL', 'http://facebook.github.io/react/')}
-      size={number('Size', 256)}
-      level={select('Level', { L: 'L', M: 'M', Q: 'Q', H: 'H' }, 'M')}
-      bgColor={color('Background Color', 'rgb(255,255,255)')}
-      fgColor={color('Foreground Color', 'rgb(0,0,0)')}
-      shape={select('Shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
-      eyeShape={select('Eye shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
-      imageSrc={text('Image source', 'https://emoji.slack-edge.com/T8C69ARQV/quintaessentia/6e9e7ed89c376844.png')}
-      imageWidth={number('Image width', 40)}
-      imageHeight={number('Image height', 40)}
-      imagePosition={select('Image Position', { TOP: 'TOP', BOTTOM: 'BOTTOM', RIGHT: 'RIGHT', LEFT: 'LEFT', CENTER: 'CENTER' }, 'CENTER')}
-      imageExcavate={boolean('Excavate', true)}
-    />
+    <>
+      <QRCode
+        value={text('Value or URL', 'http://facebook.github.io/react/')}
+        size={number('Size', 256)}
+        level={select('Level', { L: 'L', M: 'M', Q: 'Q', H: 'H' }, 'M')}
+        bgColor={color('Background Color', 'rgb(255,255,255)')}
+        fgColor={color('Foreground Color', 'rgb(0,0,0)')}
+        shape={select('Shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
+        eyeShape={select('Eye shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
+        imageSrc={text('Image source', quintaImg)}
+        imageWidth={number('Image width', 40)}
+        imageHeight={number('Image height', 40)}
+        imagePosition={select('Image Position', { TOP: 'TOP', BOTTOM: 'BOTTOM', RIGHT: 'RIGHT', LEFT: 'LEFT', CENTER: 'CENTER' }, 'CENTER')}
+        imageExcavate={boolean('Excavate', true)}
+        id={text('Id', 'svgID')}
+      />
+      <button onClick={() => downloadAsSvg('svgID')}>Export to SVG</button>
+      <button onClick={() => downloadAsPng('svgID')}>Export to PNG</button>
+      <button onClick={() => downloadAsPdf('svgID')}>Export to PDF</button>
+    </>
   ));

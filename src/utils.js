@@ -1,4 +1,6 @@
 import replace from 'lodash/replace';
+import { saveSvgAsPng, svgAsDataUri } from 'save-svg-as-png';
+import { jsPDF } from 'jspdf';
 
 const convertStr = (str) => {
   let out = '';
@@ -44,6 +46,43 @@ const downloadAsSvg = (id) => {
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
+};
+
+const downloadAsPng = (id) => {
+  saveSvgAsPng(document.getElementById(id), `${id}.png`);
+  // CORS is blocking download cuz it's http on local.
+};
+
+const downloadAsPdf = (id) => {
+  const svg = document.getElementById(id);
+  svgAsDataUri(svg, {}, function (svgUri) {
+    var image = document.createElement('img');
+
+    image.src = svgUri;
+    image.onload = function () {
+      var canvas = document.createElement('canvas');
+      var context = canvas.getContext('2d');
+      // eslint-disable-next-line new-cap
+      var doc = new jsPDF('portrait', 'pt'); // It's 3rd party library
+      var dataUrl;
+
+      canvas.width = image.width;
+      canvas.height = image.height;
+      context.drawImage(image, 0, 0, image.width, image.height);
+      dataUrl = canvas.toDataURL('image/jpeg');
+      doc.addImage(dataUrl, 'JPEG', 0, 0, image.width, image.height);
+
+      const dataUriString = doc.output('dataurlstring');
+      var link = document.createElement('a');
+      link.addEventListener('click', () => {
+        link.href = dataUriString;
+        link.download = `${id}.pdf`;
+        document.body.removeChild(link);
+      }, false);
+      document.body.appendChild(link);
+      link.click();
+    };
+  });
 };
 
 const parseStyles = (svg) => {
@@ -128,5 +167,7 @@ export {
   calculateImagePosition,
   convertStr,
   downloadAsSvg,
+  downloadAsPng,
+  downloadAsPdf,
   parseStyles,
 };

@@ -27,9 +27,11 @@
     "email": "github@quintaessentia.rs"
   },
   "dependencies": {
+    "jspdf": "^2.1.1",
     "lodash": "4.17.15",
     "prop-types": "15.7.2",
-    "qr.js": "0.0.0"
+    "qr.js": "0.0.0",
+    "save-svg-as-png": "^1.4.17"
   },
   "peerDependencies": {
     "react": "16.13.1",

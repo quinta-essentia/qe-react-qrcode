@@ -13,7 +13,7 @@ import {
   calculateExcavationPositions,
   calculateImagePosition,
   convertStr,
-  downloadAsSvg,
+  downloadAsPdf,
 } from './utils';
 
 const QRCodeBodyShapePropTypes = {
@@ -134,7 +134,7 @@ const QRCode = ({
       height={`${size}px`}
       style={{ backgroundColor: bgColor }}
       id={id}
-      onClick={() => downloadAsSvg(id)}
+      onClick={() => downloadAsPdf(id)}
     >
       <g id='points' >
         {map(
