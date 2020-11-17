@@ -31,8 +31,7 @@ storiesOf('QRCode', module)
         shape={select('Shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
         eyeShape={select('Eye shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
         imageSrc={text('Image source', quintaImg)}
-        imageWidth={number('Image width', 40)}
-        imageHeight={number('Image height', 40)}
+        imageRatio={number('Image ratio in %', 40)}
         imagePosition={select('Image Position', { TOP: 'TOP', BOTTOM: 'BOTTOM', RIGHT: 'RIGHT', LEFT: 'LEFT', CENTER: 'CENTER' }, 'CENTER')}
         imageExcavate={boolean('Excavate', true)}
         id={text('Id', 'svgID')}

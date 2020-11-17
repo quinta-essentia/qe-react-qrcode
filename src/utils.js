@@ -185,9 +185,37 @@ const calculateExcavationPositions = ({ position: { x, y }, imageWidth, imageHei
   };
 };
 
+const calculateImageSize = ({ width, height, imageRatio, qrCodeSize }) => {
+  const ratio = imageRatio / 100;
+  const dimensions = {};
+  if (width > height) {
+    const imageWidthToSizeRatio = (width * ratio) / qrCodeSize;
+    const oversizeRatio = imageWidthToSizeRatio > 0.3 ? 1 + imageWidthToSizeRatio : 1;
+
+    dimensions.w = (width * ratio) / oversizeRatio;
+    dimensions.h = (height * ratio) / oversizeRatio;
+  } else if (width < height) {
+    const imageHeightToSizeRatio = (height * ratio) / qrCodeSize;
+    const oversizeRatio = imageHeightToSizeRatio > 0.3 ? 1 + imageHeightToSizeRatio : 1;
+
+    dimensions.w = (width * ratio) / oversizeRatio;
+    dimensions.h = (height * ratio) / oversizeRatio;
+  } else {
+    const imageToSizeRatio = (width * ratio) / qrCodeSize;
+    console.log(imageToSizeRatio);
+    const oversizeRatio = imageToSizeRatio > 0.3 ? 1 + imageToSizeRatio : 1;
+    console.log(oversizeRatio);
+
+    dimensions.w = (width * ratio) / oversizeRatio;
+    dimensions.h = (height * ratio) / oversizeRatio;
+  }
+  return dimensions;
+};
+
 export {
   calculateExcavationPositions,
   calculateImagePosition,
+  calculateImageSize,
   convertStr,
   downloadAsSvg,
   downloadAsPng,

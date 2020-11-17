@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import noop from 'lodash/noop';
@@ -13,8 +13,14 @@ import {
   calculateExcavationPositions,
   calculateImagePosition,
   convertStr,
-  downloadAsPdf,
+  getDimensions,
+  calculateImageSize,
 } from './utils';
+
+if (process.env.NODE_ENV !== 'production') {
+  const { whyDidYouUpdate } = require('why-did-you-update');
+  whyDidYouUpdate(React);
+}
 
 const QRCodeBodyShapePropTypes = {
   cx: PropTypes.number.isRequired,
@@ -71,11 +77,11 @@ const QRCodeImage = ({ imageSrc, x, y, width, height }) => (
 );
 
 QRCodeImage.propTypes = {
+  height: PropTypes.number.isRequired,
   imageSrc: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
 };
 
 const QRCode = ({
@@ -84,15 +90,15 @@ const QRCode = ({
   fgColor,
   id,
   imageExcavate,
-  imageHeight,
   imagePosition,
   imageSrc,
-  imageWidth,
+  imageRatio,
   level,
   shape,
   size,
   value,
 }) => {
+  const [imageOptions, setImageOptions] = useState({ imageWidth: 0, imageHeight: 0 });
   const pointWidth = 5;
 
   const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -106,26 +112,25 @@ const QRCode = ({
   const backEyeBallsXCoordinates = [matrixSize - 1, matrixSize - 2, matrixSize - 3, matrixSize - 4, matrixSize - 5, matrixSize - 6, matrixSize - 7];
   const backEyeBallsYCoordinates = [matrixSize - 1, matrixSize - 2, matrixSize - 3, matrixSize - 4, matrixSize - 5, matrixSize - 6, matrixSize - 7];
 
-  let excavationCoordinates;
-  let imagePositionX = 0;
-  let imagePositionY = 0;
-
   if (imageSrc) {
-    const { x, y } = calculateImagePosition({ imagePosition, imageWidth, imageHeight, pointWidth, matrixSize });
-
-    imagePositionX = x + pointWidth;
-    imagePositionY = y + pointWidth;
-
-    if (imageExcavate) {
-      excavationCoordinates = calculateExcavationPositions({ position: { x: x, y: y }, imageWidth, imageHeight, pointWidth, matrixSize });
-    }
+    getDimensions(imageSrc)
+      .then(({ width, height }) => {
+        const { w, h } = calculateImageSize({ width, height, imageRatio, qrCodeSize: size });
+        const { x, y } = calculateImagePosition({ imagePosition, imageWidth: w, imageHeight: h, pointWidth, matrixSize });
+        // imageOptions = { imageWidth: w, imageHeight: h, imagePositionX: x + pointWidth, imagePositionY: y + pointWidth };
+        let excavationCoordinates;
+        if (imageExcavate) {
+          excavationCoordinates = calculateExcavationPositions({ position: { x: imageOptions.imagePositionX, y: imageOptions.imagePositionY }, imageWidth: imageOptions.imageWidth, imageHeight: imageOptions.imageHeight, pointWidth, matrixSize });
+        }
+        setImageOptions({ imageWidth: w, imageHeight: h, imagePositionX: x + pointWidth, imagePositionY: y + pointWidth, excavationCoordinates: excavationCoordinates });
+      });
   }
 
   const isEyeBallsPosition = (x, y) => includes(concat(frontEyeBallsXCoordinates, backEyeBallsXCoordinates), x) &&
    includes(concat(frontEyeBallsYCoordinates, backEyeBallsYCoordinates), y) &&
    !(includes(backEyeBallsXCoordinates, x) && includes(backEyeBallsYCoordinates, y));
 
-  const isExcavatedPosition = (x, y) => excavationCoordinates && includes(excavationCoordinates.excationPositionsX, x) && includes(excavationCoordinates.excationPositionsY, y);
+  const isExcavatedPosition = (x, y) => imageOptions.excavationCoordinates && includes(imageOptions.excavationCoordinates.excationPositionsX, x) && includes(imageOptions.excavationCoordinates.excationPositionsY, y);
 
   return (
     <svg
@@ -134,7 +139,6 @@ const QRCode = ({
       height={`${size}px`}
       style={{ backgroundColor: bgColor }}
       id={id}
-      onClick={() => downloadAsPdf(id)}
     >
       <g id='points' >
         {map(
@@ -149,7 +153,6 @@ const QRCode = ({
                     : <QRCodeBodyShapeSquere cx={(rIndex + 1) * pointWidth} cy={(cIndex + 1) * pointWidth} width={pointWidth} color={fgColor} />
                 );
               }
-
               return noop();
             }
           )
@@ -174,10 +177,10 @@ const QRCode = ({
       {imageSrc && (
         <QRCodeImage
           imageSrc={imageSrc}
-          height={imageHeight}
-          width={imageWidth}
-          x={imagePositionX}
-          y={imagePositionY}
+          height={imageOptions.imageHeight}
+          width={imageOptions.imageWidth}
+          x={imageOptions.imagePositionX}
+          y={imageOptions.imagePositionY}
         />
       )}
     </svg>
@@ -200,10 +203,9 @@ QRCode.propTypes = {
   fgColor: PropTypes.string,
   id: PropTypes.string,
   imageExcavate: PropTypes.bool,
-  imageHeight: PropTypes.number,
+  imageRatio: PropTypes.number,
   imagePosition: PropTypes.oneOf(['TOP', 'BOTTOM', 'LEFT', 'RIGHT', 'CENTER']),
   imageSrc: PropTypes.string,
-  imageWidth: PropTypes.number,
   level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
   shape: PropTypes.oneOf(['CIRCLE', 'SQUERE']),
   size: PropTypes.number,

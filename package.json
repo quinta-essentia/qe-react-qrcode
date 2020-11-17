@@ -31,7 +31,8 @@
     "lodash": "4.17.15",
     "prop-types": "15.7.2",
     "qr.js": "0.0.0",
-    "save-svg-as-png": "^1.4.17"
+    "save-svg-as-png": "^1.4.17",
+    "why-did-you-update": "^1.0.8"
   },
   "peerDependencies": {
     "react": "16.13.1",
