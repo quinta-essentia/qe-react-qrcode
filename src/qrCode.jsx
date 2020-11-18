@@ -18,11 +18,6 @@ import {
   calculateImageSize,
 } from './utils';
 
-if (process.env.NODE_ENV !== 'production') {
-  const { whyDidYouUpdate } = require('why-did-you-update');
-  whyDidYouUpdate(React);
-}
-
 const QRCodeBodyShapePropTypes = {
   cx: PropTypes.number.isRequired,
   cy: PropTypes.number.isRequired,
