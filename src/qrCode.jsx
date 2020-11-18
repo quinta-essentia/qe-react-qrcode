@@ -193,6 +193,7 @@ QRCode.defaultProps = {
   level: 'M',
   shape: 'SQUERE',
   size: 256,
+  imageRatio: 50,
 };
 
 QRCode.propTypes = {
