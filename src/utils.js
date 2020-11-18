@@ -189,27 +189,19 @@ const calculateExcavationPositions = ({ position: { x, y }, imageWidth, imageHei
 
 const calculateImageSize = ({ width, height, imageRatio, qrCodeSize }) => {
   const ratio = imageRatio / 100;
+  const maxSize = (3 / 10) * qrCodeSize;
   const dimensions = {};
   if (width > height) {
-    const imageWidthToSizeRatio = (width * ratio) / qrCodeSize;
-    const oversizeRatio = imageWidthToSizeRatio > 0.3 ? 1 + imageWidthToSizeRatio : 1;
-
-    dimensions.w = (width * ratio) / oversizeRatio;
-    dimensions.h = (height * ratio) / oversizeRatio;
+    const imageWidthToSizeRatio = maxSize / width;
+    dimensions.w = maxSize * ratio;
+    dimensions.h = height * imageWidthToSizeRatio * ratio;
   } else if (width < height) {
-    const imageHeightToSizeRatio = (height * ratio) / qrCodeSize;
-    const oversizeRatio = imageHeightToSizeRatio > 0.3 ? 1 + imageHeightToSizeRatio : 1;
-
-    dimensions.w = (width * ratio) / oversizeRatio;
-    dimensions.h = (height * ratio) / oversizeRatio;
+    const imageHeightToSizeRatio = maxSize / height;
+    dimensions.w = width * imageHeightToSizeRatio * ratio;
+    dimensions.h = maxSize * ratio;
   } else {
-    const imageToSizeRatio = (width * ratio) / qrCodeSize;
-    console.log(imageToSizeRatio);
-    const oversizeRatio = imageToSizeRatio > 0.3 ? 1 + imageToSizeRatio : 1;
-    console.log(oversizeRatio);
-
-    dimensions.w = (width * ratio) / oversizeRatio;
-    dimensions.h = (height * ratio) / oversizeRatio;
+    dimensions.w = maxSize * ratio;
+    dimensions.h = maxSize * ratio;
   }
   return dimensions;
 };

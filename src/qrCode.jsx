@@ -69,8 +69,7 @@ QRCodeEyeShapeSquere.propTypes = QRCodeEyeShapePropTypes;
 const QRCodeImage = ({ imageSrc, x, y, width, height }) => (
   <image
     xlinkHref={imageSrc}
-    height={height}
-    width={width}
+    style={{ width, height }}
     x={x}
     y={y}
     preserveAspectRatio='none'
