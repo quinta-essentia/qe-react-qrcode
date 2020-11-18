@@ -100,7 +100,7 @@ const QRCode = ({
   value,
 }) => {
   useEffect(() => {
-    const loadImageOptions = async () => {
+    (async () => {
       if (imageSrc) {
         const { width, height } = await getDimensions(imageSrc);
         const { w, h } = calculateImageSize({ width, height, imageRatio, qrCodeSize: size });
@@ -113,9 +113,7 @@ const QRCode = ({
         console.log(excavationCoordinates);
         if (!has(imageOptions, 'imagePositionY')) setImageOptions({ imageWidth: w, imageHeight: h, imagePositionX: x + pointWidth, imagePositionY: y + pointWidth, excavationCoordinates: excavationCoordinates });
       }
-    };
-
-    loadImageOptions();
+    })();
   }, [imageSrc]);
 
   const [imageOptions, setImageOptions] = useState({ imageWidth: 0, imageHeight: 0 });
