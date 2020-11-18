@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import noop from 'lodash/noop';
 import map from 'lodash/map';
 import includes from 'lodash/includes';
 import concat from 'lodash/concat';
+import has from 'lodash/has';
 
 import QRCodeImpl from 'qr.js/lib/QRCode';
 import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel';
@@ -98,6 +99,25 @@ const QRCode = ({
   size,
   value,
 }) => {
+  useEffect(() => {
+    const loadImageOptions = async () => {
+      if (imageSrc) {
+        const { width, height } = await getDimensions(imageSrc);
+        const { w, h } = calculateImageSize({ width, height, imageRatio, qrCodeSize: size });
+        const { x, y } = calculateImagePosition({ imagePosition, imageWidth: w, imageHeight: h, pointWidth, matrixSize });
+        // imageOptions = { imageWidth: w, imageHeight: h, imagePositionX: x + pointWidth, imagePositionY: y + pointWidth };
+        let excavationCoordinates;
+        if (imageExcavate) {
+          excavationCoordinates = calculateExcavationPositions({ position: { x, y }, imageWidth: w, imageHeight: h, pointWidth, matrixSize });
+        }
+        console.log(excavationCoordinates);
+        if (!has(imageOptions, 'imagePositionY')) setImageOptions({ imageWidth: w, imageHeight: h, imagePositionX: x + pointWidth, imagePositionY: y + pointWidth, excavationCoordinates: excavationCoordinates });
+      }
+    };
+
+    loadImageOptions();
+  }, [imageSrc]);
+
   const [imageOptions, setImageOptions] = useState({ imageWidth: 0, imageHeight: 0 });
   const pointWidth = 5;
 
@@ -111,20 +131,6 @@ const QRCode = ({
   const frontEyeBallsYCoordinates = [0, 1, 2, 3, 4, 5, 6];
   const backEyeBallsXCoordinates = [matrixSize - 1, matrixSize - 2, matrixSize - 3, matrixSize - 4, matrixSize - 5, matrixSize - 6, matrixSize - 7];
   const backEyeBallsYCoordinates = [matrixSize - 1, matrixSize - 2, matrixSize - 3, matrixSize - 4, matrixSize - 5, matrixSize - 6, matrixSize - 7];
-
-  if (imageSrc) {
-    getDimensions(imageSrc)
-      .then(({ width, height }) => {
-        const { w, h } = calculateImageSize({ width, height, imageRatio, qrCodeSize: size });
-        const { x, y } = calculateImagePosition({ imagePosition, imageWidth: w, imageHeight: h, pointWidth, matrixSize });
-        // imageOptions = { imageWidth: w, imageHeight: h, imagePositionX: x + pointWidth, imagePositionY: y + pointWidth };
-        let excavationCoordinates;
-        if (imageExcavate) {
-          excavationCoordinates = calculateExcavationPositions({ position: { x: imageOptions.imagePositionX, y: imageOptions.imagePositionY }, imageWidth: imageOptions.imageWidth, imageHeight: imageOptions.imageHeight, pointWidth, matrixSize });
-        }
-        setImageOptions({ imageWidth: w, imageHeight: h, imagePositionX: x + pointWidth, imagePositionY: y + pointWidth, excavationCoordinates: excavationCoordinates });
-      });
-  }
 
   const isEyeBallsPosition = (x, y) => includes(concat(frontEyeBallsXCoordinates, backEyeBallsXCoordinates), x) &&
    includes(concat(frontEyeBallsYCoordinates, backEyeBallsYCoordinates), y) &&

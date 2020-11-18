@@ -31,13 +31,14 @@ storiesOf('QRCode', module)
         shape={select('Shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
         eyeShape={select('Eye shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
         imageSrc={text('Image source', quintaImg)}
-        imageRatio={number('Image ratio in %', 40)}
+        imageRatio={number('Image ratio in %', 30)}
         imagePosition={select('Image Position', { TOP: 'TOP', BOTTOM: 'BOTTOM', RIGHT: 'RIGHT', LEFT: 'LEFT', CENTER: 'CENTER' }, 'CENTER')}
         imageExcavate={boolean('Excavate', true)}
         id={text('Id', 'svgID')}
       />
       <button onClick={() => downloadAsSvg('svgID')}>Export to SVG</button>
       <button onClick={() => downloadAsPng('svgID')}>Export to PNG</button>
-      <button onClick={() => downloadAsPdf('svgID')}>Export to PDF</button>
+      <button onClick={() => downloadAsPdf('svgID', 256)}>Export to PDF</button>
+      {/* You need to pass size to download as pdf so you don't end up with a4 page */}
     </>
   ));

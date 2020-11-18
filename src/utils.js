@@ -76,27 +76,26 @@ const getDimensions = async (file) => {
   }
 };
 
-const downloadAsPdf = (id) => {
+const downloadAsPdf = (id, size) => {
   const svg = document.getElementById(id);
   svgAsDataUri(svg, {}, function (svgUri) {
-    var image = document.createElement('img');
+    const image = document.createElement('img');
 
     image.src = svgUri;
     image.onload = function () {
-      var canvas = document.createElement('canvas');
-      var context = canvas.getContext('2d');
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
       // eslint-disable-next-line new-cap
-      var doc = new jsPDF('portrait', 'pt'); // It's 3rd party library
-      var dataUrl;
+      const doc = new jsPDF('portrait', 'pt', [image.width, image.height]); // It's 3rd party library
 
       canvas.width = image.width;
       canvas.height = image.height;
       context.drawImage(image, 0, 0, image.width, image.height);
-      dataUrl = canvas.toDataURL('image/jpeg');
+      const dataUrl = canvas.toDataURL('image/jpeg');
       doc.addImage(dataUrl, 'JPEG', 0, 0, image.width, image.height);
 
       const dataUriString = doc.output('dataurlstring');
-      var link = document.createElement('a');
+      const link = document.createElement('a');
       link.addEventListener('click', () => {
         link.href = dataUriString;
         link.download = `${id}.pdf`;
@@ -179,6 +178,9 @@ const calculateExcavationPositions = ({ position: { x, y }, imageWidth, imageHei
   for (let i = 0; i < numOfExcavatedYCells; i++) {
     excationPositionsY.push(imageStartingYIndex + i);
   }
+
+  if ((x % pointWidth) < (pointWidth / 2)) excationPositionsX.pop();
+  if ((y % pointWidth) < (pointWidth / 2)) excationPositionsY.pop();
   return {
     excationPositionsX,
     excationPositionsY,
