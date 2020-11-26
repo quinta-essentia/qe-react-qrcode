@@ -28,8 +28,8 @@ storiesOf('QRCode', module)
         level={select('Level', { L: 'L', M: 'M', Q: 'Q', H: 'H' }, 'M')}
         bgColor={color('Background Color', 'rgb(255,255,255)')}
         fgColor={color('Foreground Color', 'rgb(0,0,0)')}
-        shape={select('Shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
-        eyeShape={select('Eye shape', { CIRCLE: 'CIRCLE', SQUERE: 'SQUERE' }, 'SQUERE')}
+        shape={select('Shape', { CIRCLE: 'CIRCLE', SQUARE: 'SQUARE' }, 'SQUARE')}
+        eyeShape={select('Eye shape', { CIRCLE: 'CIRCLE', SQUARE: 'SQUARE' }, 'SQUARE')}
         imageSrc={text('Image source', quintaImg)}
         imageRatio={number('Image ratio in %', 30)}
         imagePosition={select('Image Position', { TOP: 'TOP', BOTTOM: 'BOTTOM', RIGHT: 'RIGHT', LEFT: 'LEFT', CENTER: 'CENTER' }, 'CENTER')}

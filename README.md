@@ -17,8 +17,8 @@ import QRCode from 'qe-react-qrcode';
   level={'M'}
   bgColor='rgb(255,255,255)'
   fgColor='rgb(0,0,0)'
-  shape='SQUERE'
-  eyeShape='SQUERE'
+  shape='SQUARE'
+  eyeShape='SQUARE'
   imageSrc='https://emoji.slack-edge.com/T8C69ARQV/quintaessentia/6e9e7ed89c376844.png'
   imageWidth={40}
   imageHeight={40}

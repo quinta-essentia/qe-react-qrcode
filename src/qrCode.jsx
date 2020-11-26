@@ -37,12 +37,12 @@ const QRCodeBodyShapeCircle = ({ cx, cy, width, color }) => (
   <circle cx={cx + width / 2} cy={cy + width / 2} r={width / 2} fill={color} />
 );
 
-const QRCodeBodyShapeSquere = ({ cx, cy, width, color }) => (
+const QRCodeBodyShapeSQUARE = ({ cx, cy, width, color }) => (
   <rect x={cx} y={cy} width={width} height={width} fill={color} />
 );
 
 QRCodeBodyShapeCircle.propTypes = QRCodeBodyShapePropTypes;
-QRCodeBodyShapeSquere.propTypes = QRCodeBodyShapePropTypes;
+QRCodeBodyShapeSQUARE.propTypes = QRCodeBodyShapePropTypes;
 
 const QRCodeEyeShapeCircle = ({ x, y, width, color, bgColor }) => (
   <g>
@@ -51,7 +51,7 @@ const QRCodeEyeShapeCircle = ({ x, y, width, color, bgColor }) => (
   </g>
 );
 
-const QRCodeEyeShapeSquere = ({ x, y, width, color, bgColor }) => (
+const QRCodeEyeShapeSQUARE = ({ x, y, width, color, bgColor }) => (
   <g>
     <rect x={x + width} y={y + width} width={width * 7} height={width * 7} fill={color} />
     <rect x={x + (width * 2.5)} y={y + (width * 2.5)} stroke={bgColor} strokeWidth={width} width={width * 4} height={width * 4} fill={color} />
@@ -59,7 +59,7 @@ const QRCodeEyeShapeSquere = ({ x, y, width, color, bgColor }) => (
 );
 
 QRCodeEyeShapeCircle.propTypes = QRCodeEyeShapePropTypes;
-QRCodeEyeShapeSquere.propTypes = QRCodeEyeShapePropTypes;
+QRCodeEyeShapeSQUARE.propTypes = QRCodeEyeShapePropTypes;
 
 const QRCodeImage = ({ imageSrc, x, y, width, height }) => (
   <image
@@ -148,7 +148,7 @@ const QRCode = ({
                 return (
                   shape === 'CIRCLE'
                     ? <QRCodeBodyShapeCircle cx={(rIndex + 1) * pointWidth} cy={(cIndex + 1) * pointWidth} width={pointWidth} color={fgColor} />
-                    : <QRCodeBodyShapeSquere cx={(rIndex + 1) * pointWidth} cy={(cIndex + 1) * pointWidth} width={pointWidth} color={fgColor} />
+                    : <QRCodeBodyShapeSQUARE cx={(rIndex + 1) * pointWidth} cy={(cIndex + 1) * pointWidth} width={pointWidth} color={fgColor} />
                 );
               }
               return noop();
@@ -166,9 +166,9 @@ const QRCode = ({
         )
         : (
           <g id='eyes'>
-            <QRCodeEyeShapeSquere bgColor={bgColor} color={fgColor} x={0} y={0} width={pointWidth}/>
-            <QRCodeEyeShapeSquere bgColor={bgColor} color={fgColor} x={(matrixSize - 7) * pointWidth} y={0} width={pointWidth}/>
-            <QRCodeEyeShapeSquere bgColor={bgColor} color={fgColor} x={0} y={(matrixSize - 7) * pointWidth} width={pointWidth}/>
+            <QRCodeEyeShapeSQUARE bgColor={bgColor} color={fgColor} x={0} y={0} width={pointWidth}/>
+            <QRCodeEyeShapeSQUARE bgColor={bgColor} color={fgColor} x={(matrixSize - 7) * pointWidth} y={0} width={pointWidth}/>
+            <QRCodeEyeShapeSQUARE bgColor={bgColor} color={fgColor} x={0} y={(matrixSize - 7) * pointWidth} width={pointWidth}/>
           </g>
         )
       }
@@ -187,18 +187,18 @@ const QRCode = ({
 
 QRCode.defaultProps = {
   bgColor: '#FFFFFF',
-  eyeShape: 'SQUERE',
+  eyeShape: 'SQUARE',
   fgColor: '#000000',
   id: 'qrCodeSvg',
   level: 'M',
-  shape: 'SQUERE',
+  shape: 'SQUARE',
   size: 256,
   imageRatio: 50,
 };
 
 QRCode.propTypes = {
   bgColor: PropTypes.string,
-  eyeShape: PropTypes.oneOf(['CIRCLE', 'SQUERE']),
+  eyeShape: PropTypes.oneOf(['CIRCLE', 'SQUARE']),
   fgColor: PropTypes.string,
   id: PropTypes.string,
   imageExcavate: PropTypes.bool,
@@ -206,7 +206,7 @@ QRCode.propTypes = {
   imagePosition: PropTypes.oneOf(['TOP', 'BOTTOM', 'LEFT', 'RIGHT', 'CENTER']),
   imageSrc: PropTypes.string,
   level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-  shape: PropTypes.oneOf(['CIRCLE', 'SQUERE']),
+  shape: PropTypes.oneOf(['CIRCLE', 'SQUARE']),
   size: PropTypes.number,
   value: PropTypes.string.isRequired,
 };
